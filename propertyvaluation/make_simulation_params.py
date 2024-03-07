@@ -6,12 +6,11 @@ import math
 
 discount_rate = .055
 
-historical_discount_rates = [.0329, .0309, .0293, .0328, .04, .0339, .0261, .0227, .0332, .055]
+historical_discount_rates = [.0329, .0309, .0293, .0328, .04, .0339, .0261, .0227, .0332, .0575]
 
 time_years = 30 
 
 cf0 = - 2133390
-# - 9658390
 
 cash_flows = [198350, 222828, 242259, 256815, 277322, 298419, 320126, 342460, 359018, 
 	3546699, 134787, 158973, 183897, 201986, 228376, 255570, 283594, 312472, 333252, 
@@ -32,13 +31,15 @@ historical_market_rates = [.1139, -.0073, .0954, .1942, -.0643, .2888, .1626, .2
 
 reinvestment_rate = .1 
 
-finance_rate = .0725
+finance_rate = .0575
 
 beta = 1
 
-operating_expenses = 340000
+operating_expenses = [292368, 300474, 308636, 322466, 331163, 340110, 349316, 358788, 374957, 
+	385049, 395433, 406117, 417110, 436013, 447727, 459778, 472177, 484934, 507039, 520634, 
+	534620, 549010, 563816, 589664, 605443, 621677, 638378, 655560, 685791, 704105, 725228]
 
-noi = [566590, 590186, 608743, 622434, 642085, 662335, 683203, 704706, 720442, 
+projected_noi = [566590, 590186, 608743, 622434, 642085, 662335, 683203, 704706, 720442, 
 	743212, 766675, 790855, 815772, 833854, 860237, 887424, 915441, 944313, 
 	965086, 995655, 1027157, 1059620, 1093074, 1116932, 1152350, 1188851, 
 	1226466, 1265228, 1292622, 1333660, 1373669]
@@ -51,11 +52,14 @@ loan_amount = 7525000
 
 property_purchase_price = 1573000
 
-property_value_growth_rate = .055
+property_value_growth_rate = .05
 
 rental_growth_rate = .03
 
-vacancy_rate = .03 
+vacancy_rates = [.08, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, 
+	.07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07, .07] 
+
+property_value_last_year = 24248356
 
 pre_tax_income = [858958, 890660, 917379, 944901, 973248, 1002445, 1032519, 1063494, 1095399, 
 	1128261, 1162109, 1196972, 1232881, 1269868, 1307964, 1347202, 1387619, 1429247, 1472125, 
@@ -64,21 +68,23 @@ pre_tax_income = [858958, 890660, 917379, 944901, 973248, 1002445, 1032519, 1063
 
 gross_operating_income = pre_tax_income
 
-total_investment = 2133390
-
-gross_rental_income = 940000
-
-capex = 9298198.5
-
-inflation_rate = .038 
-
-unemployment_rate = .058 
-
-gdp_growth = .033 
-
 construction_costs = 5395033 
 
 other_costs = 2690357
+
+total_investment = property_purchase_price + construction_costs + other_costs
+
+gross_rental_income = [933650, 961660, 990509, 1020225, 1050831, 1082356, 1114827, 1148272, 1182720, 1218201, 1254748, 
+	1292390, 1331162, 1371097, 1412229, 1454596, 1498234, 1543181, 1589477, 1637161, 1686276, 1736864, 1788970, 1842639, 
+	1897918, 1954856, 2013501, 2073906, 2136124, 2200207, 2266214]
+
+capex = 9298198.5
+
+inflation_rate = [0.8, 0.7, 2.1, 2.1, 1.9, 2.3, 1.4, 7, 6.5, 3.4, 3.1]
+
+unemployment_rate = .058 
+
+gdp_growth_rates = [.0184, .0229, .0271, .0167, .0224, .0295, .0229, -.0277, .0595, .0206]
 
 cost_contingency = .15
 
@@ -135,7 +141,9 @@ def add_rrr_income():
 
 	mean_total_debt = sum(total_debt) / len(total_debt)
 
-	cap = (noi[0] - mean_total_debt) / property_purchase_price 
+	mean_projected_noi = sum(projected_noi) / len(projected_noi)
+
+	cap = (mean_projected_noi - mean_total_debt) / property_purchase_price 
 	rrr_income = cap * property_value_growth_rate
 
 	simulation_params['rrr_income'] = rrr_income 
@@ -230,7 +238,7 @@ def add_unlevered_mirr():
 
 def add_cap_rate(): 
 
-	cap_rate = noi[0] / property_purchase_price
+	cap_rate = projected_noi[0] / total_investment
 
 	simulation_params['cap_rate'] = cap_rate 
 
@@ -239,7 +247,7 @@ def add_cap_rate():
 
 def add_reversion_value(): 
 
-	rv = noi[-1] / simulation_params['cap_rate']
+	rv = projected_noi[-1] / simulation_params['cap_rate']
 
 	simulation_params['reversion_value'] = rv 
 
@@ -258,19 +266,21 @@ def add_capex():
 
 def add_cash_on_cash_return(): 
 
-	mean_cash_flows = sum(cash_flows) / len(cash_flows)
+	mean_cash_flow = sum(cash_flows) / len(cash_flows)
 
-	cash_on_cash_return = mean_cash_flows / total_investment
+	cash_on_cash_return = mean_cash_flow / total_investment
 
 	simulation_params['cash_on_cash_return'] = cash_on_cash_return
 
 	return simulation_params
 
+
 def add_gross_rent_multiplier(): 
 
-	gross_rent_multiplier = property_purchase_price / gross_rental_income
+	gross_rent_multiplier = property_purchase_price / gross_rental_income[1]
 
 	simulation_params['rent_multiplier'] = gross_rent_multiplier 
+
 
 def add_break_even_ratio(): 
 
@@ -279,7 +289,7 @@ def add_break_even_ratio():
 
 	if mean_gross_operating_income == 0: 
 		raise ValueError("Gross operating income cannot be zero.")
-	be_ratio = (operating_expenses + mean_total_debt) / mean_gross_operating_income 
+	be_ratio = (operating_expenses[1] + mean_total_debt) / mean_gross_operating_income 
 
 	simulation_params['break_even_ratio'] = be_ratio
 
@@ -288,7 +298,7 @@ def add_break_even_ratio():
 
 def add_vacancy_rate():
 
-	avg_vacancy_rate = vacancy_rate 
+	avg_vacancy_rate = vacancy_rates 
 
 	simulation_params['vacancy_rate'] = avg_vacancy_rate 
 
@@ -315,7 +325,7 @@ def add_unemployment_rate():
 
 def add_gdp_growth_rate(): 
 
-	avg_gdp_growth_rate = gdp_growth 
+	avg_gdp_growth_rate = gdp_growth_rates
 
 	simulation_params['gdp_growth_rate'] = avg_gdp_growth_rate 
 

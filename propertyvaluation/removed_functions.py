@@ -53,3 +53,33 @@ def sim_investment_betas(cash_on_cash_returns, historical_market_rates, iteratio
 cash_on_cash_returns = sim_cash_on_cash_returns(pre_tax_income, total_investment, iterations)
 print(cash_on_cash_returns)
 betas = sim_investment_betas(cash_on_cash_returns, historical_market_rates, iterations)
+
+
+def estimate_and_calc_ou(historical_discount_rates, discount_rate, t=1): 
+    """Estimate OU parameters and calculate mean & std of Discount Rate.""" 
+
+    # Historical data of discount rates
+    discount_rates = np.array(historical_discount_rates)
+
+    # Initial guesses for theta, mu and sigma
+    initial_guess = [0.2, np.mean(discount_rates), 0.02] 
+
+    # Perform optimization to estimate parameters
+    result = minimize(ou_objective, initial_guess, args=(discount_rates))
+
+    # Extract estimated params  
+    theta_est, mu_est, sigma_est = result.x 
+
+    # Use estimated params to calculate base mean and std at time t 
+    mean_rate_t, std_t = calc_base_mean_std(discount_rate, theta_est, mu_est, 
+        sigma_est, t)
+
+    return theta_est, mu_est, sigma_est, mean_rate_t, std_t 
+
+
+def calc_debt_payments(discount_rate, loan_amount, n_periods):
+    """Calculate montly loan interest payments."""
+
+
+
+
