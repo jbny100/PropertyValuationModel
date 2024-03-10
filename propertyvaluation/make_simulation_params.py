@@ -6,13 +6,14 @@ import math
 
 discount_rate = .055
 
+# Default values set
 historical_discount_rates = [.0329, .0309, .0293, .0328, .04, .0339, .0261, .0227, .0332, .0575]
 
 time_years = 30 
 
 cf0 = - 2133390
 
-cash_flows = [198350, 222828, 242259, 256815, 277322, 298419, 320126, 342460, 359018, 
+cash_flows = [3062566, 222828, 242259, 256815, 277322, 298419, 320126, 342460, 359018, 
 	3546699, 134787, 158973, 183897, 201986, 228376, 255570, 283594, 312472, 333252, 
 	363827, 165301, 197945, 231578, 255613, 291208, 327882, 365669, 404602, 432164, 473369]
 
@@ -21,12 +22,16 @@ cash_flows_excluding_debt = [566590, 590186, 608743, 622434, 642085, 662335, 683
 	965086, 995655, 1027157, 1059620, 1093074, 1116932, 1152350, 1188851, 
 	1226466, 1265228, 1292622, 1333660, 1373669]
 
+# Default values set
 risk_free_rate = .043
 
+# Default values set
 historical_risk_free_rate = [.02, .0176, .0231, .0288, .0265, .0155, .014, .0195, .0395, .043]
 
+# Default values set
 market_rate = .2
 
+# Default values set
 historical_market_rates = [.1139, -.0073, .0954, .1942, -.0643, .2888, .1626, .2689, -.1944, .2423] 
 
 reinvestment_rate = .1 
@@ -48,7 +53,9 @@ total_debt = [368240, 367358, 366484, 365620, 364763, 363916, 363077, 362246, 36
 	631888, 631882, 631875, 631868, 631861, 631854, 631848, 631841, 631834, 631828, 861856, 
 	861675, 861495, 861318, 861143, 860969, 860797, 860626, 860458, 860291]
 
-loan_amount = 7525000
+loan_amount = 4000000
+
+loan_amount2 = 3525000
 
 property_purchase_price = 1573000
 
@@ -110,7 +117,7 @@ def add_profitability_index():
 	if cf0 == 0:
 		raise ValueError("Initial cash flow (CFO) cannot be 0 when calculating \
 			the profitability index.")
-	simulation_params['profitability_index'] = simulation_params['npv'] / cf0 
+	simulation_params['profitability_index'] = simulation_params['npv'] / - cf0 
 
 	return simulation_params 
 
@@ -298,7 +305,7 @@ def add_break_even_ratio():
 
 def add_vacancy_rate():
 
-	avg_vacancy_rate = vacancy_rates 
+	avg_vacancy_rate = vacancy_rates[1] 
 
 	simulation_params['vacancy_rate'] = avg_vacancy_rate 
 
@@ -358,10 +365,13 @@ def main():
 	return simulation_params
 	
 
-main()
-print(simulation_params)
+# main()
+# print(simulation_params)
 
 
+if __name__ == "__main__": 
+	main()
+	print(simulation_params)
 
 
 

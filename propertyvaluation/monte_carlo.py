@@ -6,13 +6,14 @@ import numpy as np
 import numpy_financial as npf
 from scipy.stats import norm, lognorm, beta
 from scipy.optimize import newton 
-from distribution_calcs import estimate_and_calc_ou, simulate_cash_flows
-import distribution_calcs
+from run_simulations import dist_calcs
+from run_simulations import simulation_inputs
+import run_simulations
 
 
 class RealEstateProperty:
     
-    def __init__(self, name, initial_investment, sim_params=simulation_params): 
+    def __init__(self, name, initial_investment, dist_calcs=dist_calcs): 
     	self.name = name
     	self.initial_investment = initial_investment
     	self.sim_params = sim_params  # Dict to hold simulation parameters.
@@ -25,10 +26,12 @@ class RealEstateProperty:
 
 
     def run_simulation(self, iterations=10000): 
+        pass
 
 
 
     def analyze_data(self, results): 
+        pass
 
 
 

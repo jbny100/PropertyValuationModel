@@ -1,5 +1,7 @@
 
+Below commits use command 'git log --pretty=oneline' to retrieve 
+
 "first commit" - f082a92a1accace74dbf6ef5d6fdcd07e255acb9
 
-"second commit" - 
+"second commit" - f0f574dd53b78b21b477235dcd6a87cce14362df
 
