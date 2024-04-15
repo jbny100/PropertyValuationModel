@@ -22,12 +22,30 @@ from make_simulation_params import property_value_last_year, total_debt
 
 
 # Number of scenarios to simulate 
-iterations = 5
+iterations = 10
 n_periods = len(cash_flows)
 
 # Initial assumptions for mean and std of beta value
 mean_beta = 1.0 
 std_beta = 0.2 
+
+
+# Threshold parameters for simulation analysis
+thresholds = {
+    'threshold_high_rrr': .12,
+    'threshold_npv_good': 10000,
+    'threshold_profitability_index_good': 1.2,
+    'threshold_leverage_impact': .06,
+    'threshold_growth_low': .02,
+    'threshold_growth_high': .05,
+    'threshold_cap_rate_low': .05,
+    'threshold_cap_rate_high': .09,
+    'target_cash_on_cash_return': .10,
+    'threshold_break_even_high': .90,
+    'threshold_vacancy_high': .10, 
+    'threshold_inflation_high': .04,
+    'threshold_gdp_growth_low': .01,
+}
 
 
 """
@@ -1123,17 +1141,15 @@ simulation_inputs, dist_calcs = run_all_simulations(cf0, cash_flows, historical_
     property_purchase_price, gross_rental_income, pre_tax_income, total_debt, 
     operating_expenses, iterations)
 
-# print(simulation_inputs)
 
-# print(dist_calcs)
-# pprint(dist_calcs)
 
-# Print the 'dist_calcs' dictionary
-print("Distribution Calculations:")
-for key, value in dist_calcs.items():
-    print(f"{key}:")
-    for sub_key, sub_value in value.items():
-        print(f"  {sub_key}: {sub_value}")
+if __name__ == "__main__": 
+
+    print("Distribution Calculations:")
+    for key, value in dist_calcs.items():
+        print(f"{key}:")
+        for sub_key, sub_value in value.items():
+            print(f"  {sub_key}: {sub_value}")
 
 '''
 # Function to get all NPVs from simulations 

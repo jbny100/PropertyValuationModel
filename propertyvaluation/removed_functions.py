@@ -217,7 +217,66 @@ def run_all_simulations(cf0, cash_flows, historical_discount_rates, discount_rat
 
 
 
+def run_simulation(self): 
+        simulation_results = {
 
+        'mean_net_present_value': self.dist_calcs['npv']['mean'],
+        'std_net_present_value': self.dist_calcs['npv']['std'],
+
+        'mean_profitability_index': self.dist_calcs['profitability_index']['mean'],
+        'std_profitability_index': self.dist_calcs['profitability_index']['std'],
+
+        'mean_future_value': self.dist_calcs['fv']['mean'],
+        'std_future_value': self.dist_calcs['fv']['std'],
+
+        'mean_required_rate_of_return_capm': self.dist_calcs['rrr_capm']['mean'],
+        'std_required_rate_of_return_capm': self.dist_calcs['rrr_capm']['std'],
+
+        'mean_required_rate_of_return_income': self.dist_calcs['rrr_income']['mean'],
+        'std_required_rate_of_return_income': self.dist_calcs['rrr_income']['std'],
+
+        'mean_property_growth_rate': self.dist_calcs['simulated_growth_rates']['mean'],
+        'std_property_growth_rate': self.dist_calcs['simulated_growth_rates']['std'],
+
+        'mean_levered_irr': self.dist_calcs['levered_irr']['mean'],
+        'std_levered_irr': self.dist_calcs['levered_irr']['std'],
+
+        'mean_unlevered_irr': self.dist_calcs['unlevered_irr']['mean'],
+        'std_unlevered_irr': self.dist_calcs['unlevered_irr']['std'],
+
+        'mean_cap_rate': self.dist_calcs['cap_rate']['mean'],
+        'std_cap_rate': self.dist_calcs['cap_rate']['std'],
+
+        'mean_reversion_value': self.dist_calcs['reversion_value']['mean'],
+        'std_reversion_value': self.dist_calcs['reversion_value']['std'],
+
+        'mean_capex_value': self.dist_calcs['capex']['mean'],
+        'std_capex_value': self.dist_calcs['capex']['std'],
+
+        'mean_cash_on_cash_return': self.dist_calcs['cash-on-cash_return']['mean'],
+        'std_cash_on_cash_return': self.dist_calcs['cash-on-cash_return']['std'],
+
+        'mean_rent_multiplier': self.dist_calcs['simulated_rent_multipliers']['mean'],
+        'std_rent_multiplier': self.dist_calcs['simulated_rent_multipliers']['std'],
+
+        'mean_break_even_ratio': self.dist_calcs['break_even_ratio']['mean'],
+        'std_break_even_ratio': self.dist_calcs['break_even_ratio']['std'],
+
+        'mean_inflation_rate': self.dist_calcs['simulated_inflation_rates']['mean'],
+        'std_inflation_rate': self.dist_calcs['simulated_inflation_rates']['std'],
+
+        'mean_vacancy_rates': self.dist_calcs['vacancy_rates']['mean'],
+        'std_vacancy_rates': self.dist_calcs['vacancy_rates']['std'],
+
+        'mean_gdp_growth_rate': self.dist_calcs['simulated_gdp_growth_rates']['mean'],
+        'std_gdp_growth_rate': self.dist_calcs['simulated_gdp_growth_rates']['std'],
+        }
+
+        return simulation_results
+
+# Filter out None results from analyses that don't trigger any alert or note.
+    analysis_results = {k: v for k, v in analysis_results.items() if v is not None}
+    return analysis_results
 
 
 
